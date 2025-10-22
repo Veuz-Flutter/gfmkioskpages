@@ -305,6 +305,10 @@
             position: absolute;
         }
 
+        .powered-by-logo_white:after{
+            background: linear-gradient(91deg, #FFFFFF00 0%, #FFFFFF 100%) !important;
+        }
+
         .powered-by-logo {
             position: absolute;
             bottom: 20px;
