@@ -64,14 +64,14 @@ function toggleKioskLock(value) {
         // Lock the kiosk
         mainContent.classList.add('hidden');
         drawerBtn.classList.add('hidden');
-        lockIcon.textContent = '🔓'; // Show unlock icon
+        // lockIcon.textContent = '🔓'; // Show unlock icon
         lockIcon.style.visibility = 'visible';
         console.log('🔒 Kiosk locked');
     } else {
         // Unlock the kiosk
         mainContent.classList.remove('hidden');
         drawerBtn.classList.remove('hidden');
-        lockIcon.textContent = '🔒'; // Show lock icon
+        // lockIcon.textContent = '🔒'; // Show lock icon
         // change the lock icon visiblity hidden
         lockIcon.style.visibility = 'hidden';
         console.log('🔓 Kiosk unlocked');
