@@ -4,9 +4,9 @@ function receiveFromFlutter(data) {
     console.log('📥 Received from Flutter:', data);
 
     if (data.type === 'toggleKioskLock') {
-        toggleKioskLock();
+        toggleKioskLock(data.value);
     } else if (data.type === 'togglePoweredBy') {
-        togglePoweredBy();
+        togglePoweredBy(data.value);
     }
 }
 
@@ -51,8 +51,9 @@ function openDrawer() {
 // Kiosk lock state
 let isKioskLocked = false;
 
-function toggleKioskLock() {
-    isKioskLocked = !isKioskLocked;
+function toggleKioskLock(value) {
+    // If value is provided (true/false), use it; otherwise toggle
+    isKioskLocked = value !== undefined ? value : !isKioskLocked;
 
     const mainContent = document.getElementById('mainContent');
     const drawerBtn = document.querySelector('.drawer-btn');
@@ -85,8 +86,9 @@ function toggleKioskLock() {
 // Powered-by visibility state
 let isPoweredByVisible = true;
 
-function togglePoweredBy() {
-    isPoweredByVisible = !isPoweredByVisible;
+function togglePoweredBy(value) {
+    // If value is provided (true/false), use it; otherwise toggle
+    isPoweredByVisible = value !== undefined ? value : !isPoweredByVisible;
 
     const footer = document.querySelector('.footer');
 
@@ -112,6 +114,22 @@ function unlockKioskLock() {
         type: 'unlockKioskLock',
         timestamp: new Date().toISOString()
     });
+}
+
+function hideDummyControlls() {
+    const dummyControls = document.getElementById('dummyControls');
+    if (dummyControls) {
+        dummyControls.classList.add('hidden');
+        console.log('🙈 Dummy controls hidden');
+    }
+}
+
+function showDummyControlls() {
+    const dummyControls = document.getElementById('dummyControls');
+    if (dummyControls) {
+        dummyControls.classList.remove('hidden');
+        console.log('👁️ Dummy controls visible');
+    }
 }
 
 // Notify Flutter that page is loaded
