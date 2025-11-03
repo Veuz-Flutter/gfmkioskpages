@@ -10,6 +10,8 @@ function receiveFromFlutter(data) {
     } else if (data.type === 'toggleCustomerDetails') {
         // Pass the customer data object (if available) or null
         toggleCustomerDetails(data.customerData !== undefined ? data.customerData : data.value);
+    } else if (data.type === 'toggleRegistrationMode') {
+        toggleRegistrationMode(data.value);
     }
 }
 
@@ -67,6 +69,73 @@ function openDrawer() {
     sendToFlutter({
         type: 'openDrawer',
         timestamp: new Date().toISOString()
+    });
+}
+
+// Self registration action
+function selfRegister(extraData) {
+    const payload = {
+        type: 'selfRegister',
+        timestamp: new Date().toISOString()
+    };
+    if (extraData && typeof extraData === 'object') {
+        payload.data = extraData;
+    }
+    console.log('📝 Self registration triggered');
+    sendToFlutter(payload);
+}
+
+// Registration mode state
+let isRegistrationMode = false;
+
+function toggleRegistrationMode(value) {
+    // If value is provided (true/false), use it; otherwise toggle
+    isRegistrationMode = value !== undefined ? value : !isRegistrationMode;
+
+    // Show only the Self Registration button when in registration mode
+    const allButtons = document.querySelectorAll('.checkin-buttons .checkin-btn');
+    const lockIcon = document.getElementById('lockIcon');
+    const lockButton = lockIcon ? lockIcon.closest('button') : null;
+    const drawerBtn = document.querySelector('.drawer-btn');
+    allButtons.forEach((button) => {
+        const handler = button.getAttribute('onclick') || '';
+        const isSelfButton = handler.includes('selfRegister');
+        if (isRegistrationMode) {
+            // Registration mode: show only the self-registration button
+            if (isSelfButton) {
+                button.classList.remove('hidden');
+            } else {
+                button.classList.add('hidden');
+            }
+            if (lockIcon) {
+                lockIcon.style.visibility = 'visible';
+            }
+            // Keep the unlock button behavior unchanged (same as kiosk unlock)
+            if (drawerBtn) {
+                drawerBtn.classList.add('hidden');
+            }
+        } else {
+            // Normal mode: hide the self button, show others
+            if (isSelfButton) {
+                button.classList.add('hidden');
+            } else {
+                button.classList.remove('hidden');
+            }
+            // Keep the unlock button behavior unchanged (same as kiosk unlock)
+            if (lockIcon) {
+                // Only show the unlock if kiosk is locked; otherwise hide it
+                lockIcon.style.visibility = isKioskLocked ? 'visible' : 'hidden';
+            }
+            if (drawerBtn) {
+                drawerBtn.classList.remove('hidden');
+            }
+        }
+    });
+
+    sendToFlutter({
+        type: 'toggleRegistrationMode',
+        value: isRegistrationMode,
+        timestamp: new Date().toISOString(),
     });
 }
 

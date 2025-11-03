@@ -248,6 +248,10 @@ body {
     box-shadow: 0 12px 35px rgba(74, 44, 122, 0.4);
 }
 
+.checkin-btn.hidden {
+    display: none;
+}
+
 
 .btn-icon {
     width: 60px;
