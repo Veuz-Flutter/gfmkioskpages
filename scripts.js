@@ -12,6 +12,8 @@ function receiveFromFlutter(data) {
         toggleCustomerDetails(data.customerData !== undefined ? data.customerData : data.value);
     } else if (data.type === 'toggleRegistrationMode') {
         toggleRegistrationMode(data.value);
+    } else if (data.type === 'showError') {
+        showError(data.error);
     }
 }
 
@@ -221,6 +223,9 @@ function hideDummyControlls() {
 function showWelcome(userData) {
     console.log('👋 Welcome message shown', userData);
 
+    // Close the registration form
+    closeRegistrationForm();
+
     // Update welcome message with user data
     if (userData) {
         // Extract the name from userData
@@ -277,6 +282,22 @@ function openRegistrationForm() {
         console.log('👁️ Registration form visible');
     }
 
+    // Clear any previous errors when opening the form
+    clearErrors();
+
+    // Setup field error clearing (in case form was loaded dynamically)
+    setTimeout(() => {
+        setupFieldErrorClearing();
+    }, 100);
+
+    // Focus on first name field after 1 second
+    setTimeout(() => {
+        const firstNameField = document.getElementById('reg-firstname');
+        if (firstNameField) {
+            firstNameField.focus();
+        }
+    }, 1000);
+
     sendToFlutter({
         type: 'openRegistrationForm',
         timestamp: new Date().toISOString()
@@ -301,17 +322,25 @@ function handleRegistrationSubmit(event) {
     event.preventDefault();
     console.log('📝 Registration form submitted');
 
+    // Clear previous errors
+    clearErrors();
+
     // Get form data
     const formData = new FormData(event.target);
+    const countryCode = formData.get('country_code') || '+971';
+    const phoneNumber = formData.get('mobile') || '';
+    const mobile = phoneNumber ? `${countryCode}${phoneNumber}` : '';
+
     const registrationData = {
         firstname: formData.get('firstname'),
         lastname: formData.get('lastname'),
         email: formData.get('email'),
-        mobile: formData.get('mobile'),
-        company: formData.get('company'),
+        mobile: mobile,
+        company_name: formData.get('company'),
         designation: formData.get('designation'),
         nationality: formData.get('nationality'),
-        ticket: formData.get('ticket') ? { ticket_display_name: formData.get('ticket') } : null
+        country_of_residence: formData.get('country_of_residence'),
+        ticket: 176,
     };
 
     console.log('📋 Registration data:', registrationData);
@@ -324,10 +353,112 @@ function handleRegistrationSubmit(event) {
     });
 
     // Close the form after submission
-    closeRegistrationForm();
+    // closeRegistrationForm();
 
     // Optionally show success message or welcome message
     // showWelcome(registrationData);
+}
+
+// Field mapping from API field names to form field IDs
+const registrationFieldMap = {
+    'firstname': 'reg-firstname',
+    'lastname': 'reg-lastname',
+    'email': 'reg-email',
+    'mobile': 'reg-mobile',
+    'company_name': 'reg-company',
+    'company': 'reg-company', // Also support 'company' directly
+    'designation': 'reg-designation',
+    'nationality': 'reg-nationality',
+    'ticket': 'reg-ticket',
+    'country_of_residence': 'reg-country-of-residence'
+};
+
+// Function to show validation errors
+function showError(errorData) {
+    console.log('❌ Showing registration errors:', errorData);
+
+    // Clear previous errors first
+    clearErrors();
+
+    // Handle error structure: { detail: { field: [error messages] } }
+    let errors = null;
+    if (errorData && errorData.detail) {
+        errors = errorData.detail;
+    } else if (errorData && typeof errorData === 'object') {
+        errors = errorData;
+    }
+
+    if (!errors) {
+        console.warn('⚠️ Invalid error format');
+        return;
+    }
+
+    // Iterate through each error field
+    Object.keys(errors).forEach(fieldName => {
+        const fieldId = registrationFieldMap[fieldName];
+
+        // Skip if field doesn't exist in form
+        if (!fieldId) {
+            console.warn(`⚠️ Field "${fieldName}" not found in form`);
+            return;
+        }
+
+        const fieldElement = document.getElementById(fieldId);
+        if (!fieldElement) {
+            console.warn(`⚠️ Element with ID "${fieldId}" not found`);
+            return;
+        }
+
+        // Get error messages (could be array or single string)
+        const errorMessages = Array.isArray(errors[fieldName])
+            ? errors[fieldName]
+            : [errors[fieldName]];
+
+        // Display first error message
+        const errorMessage = errorMessages[0];
+
+        // Add error class to input/select
+        fieldElement.classList.add('error');
+
+        // If it's a mobile field error, also highlight the country code selector
+        if (fieldId === 'reg-mobile') {
+            const countryCodeSelect = document.getElementById('reg-country-code');
+            if (countryCodeSelect) {
+                countryCodeSelect.classList.add('error');
+            }
+        }
+
+        // Find the parent registration-field div
+        const fieldContainer = fieldElement.closest('.registration-field');
+        if (fieldContainer) {
+            // Remove existing error message if any
+            const existingError = fieldContainer.querySelector('.registration-field-error');
+            if (existingError) {
+                existingError.remove();
+            }
+
+            // Create and append error message
+            const errorElement = document.createElement('span');
+            errorElement.className = 'registration-field-error';
+            errorElement.textContent = errorMessage;
+            fieldContainer.appendChild(errorElement);
+        }
+    });
+}
+
+// Function to clear all validation errors
+function clearErrors() {
+    // Remove error class from all fields (including country code select)
+    const errorFields = document.querySelectorAll('.registration-field input.error, .registration-field select.error, .phone-input-container select.error, .phone-input-container input.error');
+    errorFields.forEach(field => {
+        field.classList.remove('error');
+    });
+
+    // Remove all error messages
+    const errorMessages = document.querySelectorAll('.registration-field-error');
+    errorMessages.forEach(error => {
+        error.remove();
+    });
 }
 
 // Customer details data
@@ -408,9 +539,66 @@ function updateUserDetailsForm(userData) {
     }
 }
 
+// Clear field error when user starts typing
+function setupFieldErrorClearing() {
+    const registrationForm = document.getElementById('registrationFormElement');
+    if (registrationForm) {
+        const fields = registrationForm.querySelectorAll('input, select');
+        fields.forEach(field => {
+            // Handle input events for text fields
+            field.addEventListener('input', function () {
+                // Clear error for this specific field
+                this.classList.remove('error');
+                const fieldContainer = this.closest('.registration-field');
+                if (fieldContainer) {
+                    const errorElement = fieldContainer.querySelector('.registration-field-error');
+                    if (errorElement) {
+                        errorElement.remove();
+                    }
+                }
+            });
+
+            // Handle change events for select dropdowns
+            if (field.tagName === 'SELECT') {
+                field.addEventListener('change', function () {
+                    // Clear error for this specific field
+                    this.classList.remove('error');
+                    const fieldContainer = this.closest('.registration-field');
+                    if (fieldContainer) {
+                        const errorElement = fieldContainer.querySelector('.registration-field-error');
+                        if (errorElement) {
+                            errorElement.remove();
+                        }
+                    }
+                });
+            }
+        });
+
+        // Setup phone number field to only accept numbers
+        const phoneNumberField = document.getElementById('reg-mobile');
+        if (phoneNumberField) {
+            phoneNumberField.addEventListener('input', function (e) {
+                // Remove any non-numeric characters
+                this.value = this.value.replace(/[^0-9]/g, '');
+            });
+
+            phoneNumberField.addEventListener('paste', function (e) {
+                e.preventDefault();
+                const paste = (e.clipboardData || window.clipboardData).getData('text');
+                const numbersOnly = paste.replace(/[^0-9]/g, '');
+                this.value = numbersOnly;
+            });
+        }
+    }
+}
+
 // Notify Flutter that page is loaded
 window.addEventListener('load', function () {
     console.log('✅ Event Check-In page loaded');
+
+    // Setup field error clearing on input
+    setupFieldErrorClearing();
+
     sendToFlutter({
         type: 'pageLoaded',
         timestamp: new Date().toISOString()

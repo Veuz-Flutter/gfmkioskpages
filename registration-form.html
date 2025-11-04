@@ -5,6 +5,7 @@
     body {
         font-family: 'Poppins', sans-serif !important;
     }
+
     /* Registration Form */
     .registration-form {
         position: fixed;
@@ -57,7 +58,7 @@
         padding: 15px;
         display: flex;
         justify-content: space-between;
-    
+
     }
 
     .registration-form-content-wrapper {
@@ -82,7 +83,7 @@
         font-size: 14px;
         font-weight: 400;
         margin-bottom: 8px;
-    
+
     }
 
     .registration-field input,
@@ -95,7 +96,7 @@
         font-size: 16px;
         font-weight: 500;
         min-height: 48px;
-    
+
         /* box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); */
         transition: all 0.2s ease;
 
@@ -106,6 +107,32 @@
         outline: none;
         border-color: #421989;
         box-shadow: 0 4px 12px #42198980;
+    }
+
+    .registration-field input.error,
+    .registration-field select.error {
+        border-color: #ef4444;
+    }
+
+    .registration-field-error {
+        color: #ef4444;
+        font-size: 12px;
+        margin-top: 4px;
+        display: block;
+    }
+
+    .phone-input-container {
+        display: flex;
+        gap: 8px;
+    }
+
+    .phone-input-container .country-code-select {
+        flex: 0 0 120px;
+        min-width: 120px;
+    }
+
+    .phone-input-container .phone-number-input {
+        flex: 1;
     }
 
     .registration-form-actions {
@@ -125,7 +152,7 @@
         font-weight: 600;
         cursor: pointer;
         transition: all 0.2s ease;
-    
+
     }
 
     .registration-btn-primary {
@@ -234,12 +261,12 @@
             <div class="registration-form-content-wrapper">
                 <div class="registration-field-group">
                     <div class="registration-field">
-                        <label for="reg-firstname">First Name *</label>
-                        <input type="text" id="reg-firstname" name="firstname" required>
+                        <label for="reg-firstname">First Name</label>
+                        <input type="text" id="reg-firstname" name="firstname">
                     </div>
                     <div class="registration-field">
-                        <label for="reg-email">Email Address *</label>
-                        <input type="email" id="reg-email" name="email" required>
+                        <label for="reg-email">Email Address</label>
+                        <input type="email" id="reg-email" name="email">
                     </div>
                     <div class="registration-field">
                         <label for="reg-company">Company Name</label>
@@ -249,16 +276,95 @@
                 </div>
                 <div class="registration-field-group">
                     <div class="registration-field">
-                        <label for="reg-lastname">Last Name *</label>
-                        <input type="text" id="reg-lastname" name="lastname" required>
+                        <label for="reg-lastname">Last Name</label>
+                        <input type="text" id="reg-lastname" name="lastname">
                     </div>
                     <div class="registration-field">
-                        <label for="reg-mobile">Phone Number *</label>
-                        <input type="tel" id="reg-mobile" name="mobile" required>
+                        <label for="reg-mobile">Phone Number</label>
+                        <div class="phone-input-container">
+                            <select id="reg-country-code" name="country_code" class="country-code-select">
+                                <option value="+971">+971 (UAE)</option>
+                                <option value="+1">+1 (US/CA)</option>
+                                <option value="+44">+44 (UK)</option>
+                                <option value="+91">+91 (India)</option>
+                                <option value="+966">+966 (Saudi Arabia)</option>
+                                <option value="+974">+974 (Qatar)</option>
+                                <option value="+965">+965 (Kuwait)</option>
+                                <option value="+973">+973 (Bahrain)</option>
+                                <option value="+968">+968 (Oman)</option>
+                                <option value="+33">+33 (France)</option>
+                                <option value="+49">+49 (Germany)</option>
+                                <option value="+39">+39 (Italy)</option>
+                                <option value="+34">+34 (Spain)</option>
+                                <option value="+61">+61 (Australia)</option>
+                                <option value="+81">+81 (Japan)</option>
+                                <option value="+86">+86 (China)</option>
+                                <option value="+82">+82 (South Korea)</option>
+                                <option value="+65">+65 (Singapore)</option>
+                                <option value="+60">+60 (Malaysia)</option>
+                                <option value="+62">+62 (Indonesia)</option>
+                                <option value="+66">+66 (Thailand)</option>
+                                <option value="+84">+84 (Vietnam)</option>
+                                <option value="+90">+90 (Turkey)</option>
+                                <option value="+20">+20 (Egypt)</option>
+                                <option value="+27">+27 (South Africa)</option>
+                                <option value="+55">+55 (Brazil)</option>
+                                <option value="+52">+52 (Mexico)</option>
+                                <option value="+7">+7 (Russia/Kazakhstan)</option>
+                            </select>
+                            <input type="tel" id="reg-mobile" name="mobile" class="phone-number-input"
+                                placeholder="Enter phone number" pattern="[0-9]*" inputmode="numeric"
+                                onkeypress="return /[0-9]/i.test(event.key)">
+                        </div>
                     </div>
                     <div class="registration-field">
                         <label for="reg-nationality">Nationality</label>
-                        <input type="text" id="reg-nationality" name="nationality">
+                        <select id="reg-nationality" name="nationality">
+                            <option value="">Select Nationality</option>
+                            <option value="UAE">United Arab Emirates</option>
+                            <option value="Saudi Arabia">Saudi Arabia</option>
+                            <option value="Qatar">Qatar</option>
+                            <option value="Kuwait">Kuwait</option>
+                            <option value="Bahrain">Bahrain</option>
+                            <option value="Oman">Oman</option>
+                            <option value="USA">United States</option>
+                            <option value="Canada">Canada</option>
+                            <option value="UK">United Kingdom</option>
+                            <option value="India">India</option>
+                            <option value="Pakistan">Pakistan</option>
+                            <option value="Bangladesh">Bangladesh</option>
+                            <option value="Philippines">Philippines</option>
+                            <option value="Egypt">Egypt</option>
+                            <option value="Lebanon">Lebanon</option>
+                            <option value="Jordan">Jordan</option>
+                            <option value="Syria">Syria</option>
+                            <option value="Iraq">Iraq</option>
+                            <option value="Iran">Iran</option>
+                            <option value="Turkey">Turkey</option>
+                            <option value="France">France</option>
+                            <option value="Germany">Germany</option>
+                            <option value="Italy">Italy</option>
+                            <option value="Spain">Spain</option>
+                            <option value="Netherlands">Netherlands</option>
+                            <option value="Belgium">Belgium</option>
+                            <option value="Switzerland">Switzerland</option>
+                            <option value="Australia">Australia</option>
+                            <option value="New Zealand">New Zealand</option>
+                            <option value="Japan">Japan</option>
+                            <option value="China">China</option>
+                            <option value="South Korea">South Korea</option>
+                            <option value="Singapore">Singapore</option>
+                            <option value="Malaysia">Malaysia</option>
+                            <option value="Indonesia">Indonesia</option>
+                            <option value="Thailand">Thailand</option>
+                            <option value="Vietnam">Vietnam</option>
+                            <option value="South Africa">South Africa</option>
+                            <option value="Brazil">Brazil</option>
+                            <option value="Mexico">Mexico</option>
+                            <option value="Argentina">Argentina</option>
+                            <option value="Russia">Russia</option>
+                            <option value="Other">Other</option>
+                        </select>
                     </div>
 
                 </div>
@@ -269,12 +375,52 @@
                         <input type="text" id="reg-designation" name="designation">
                     </div>
                     <div class="registration-field">
-                        <label for="reg-ticket">Ticket Type</label>
-                        <select id="reg-ticket" name="ticket">
-                            <option value="">Select Ticket Type</option>
-                            <option value="VIP Access">VIP Access</option>
-                            <option value="Standard">Standard</option>
-                            <option value="Premium">Premium</option>
+                        <label for="reg-country-of-residence">Country of Residence</label>
+                        <select id="reg-country-of-residence" name="country_of_residence">
+                            <option value="">Select Country of Residence</option>
+                            <option value="UAE">United Arab Emirates</option>
+                            <option value="Saudi Arabia">Saudi Arabia</option>
+                            <option value="Qatar">Qatar</option>
+                            <option value="Kuwait">Kuwait</option>
+                            <option value="Bahrain">Bahrain</option>
+                            <option value="Oman">Oman</option>
+                            <option value="USA">United States</option>
+                            <option value="Canada">Canada</option>
+                            <option value="UK">United Kingdom</option>
+                            <option value="India">India</option>
+                            <option value="Pakistan">Pakistan</option>
+                            <option value="Bangladesh">Bangladesh</option>
+                            <option value="Philippines">Philippines</option>
+                            <option value="Egypt">Egypt</option>
+                            <option value="Lebanon">Lebanon</option>
+                            <option value="Jordan">Jordan</option>
+                            <option value="Syria">Syria</option>
+                            <option value="Iraq">Iraq</option>
+                            <option value="Iran">Iran</option>
+                            <option value="Turkey">Turkey</option>
+                            <option value="France">France</option>
+                            <option value="Germany">Germany</option>
+                            <option value="Italy">Italy</option>
+                            <option value="Spain">Spain</option>
+                            <option value="Netherlands">Netherlands</option>
+                            <option value="Belgium">Belgium</option>
+                            <option value="Switzerland">Switzerland</option>
+                            <option value="Australia">Australia</option>
+                            <option value="New Zealand">New Zealand</option>
+                            <option value="Japan">Japan</option>
+                            <option value="China">China</option>
+                            <option value="South Korea">South Korea</option>
+                            <option value="Singapore">Singapore</option>
+                            <option value="Malaysia">Malaysia</option>
+                            <option value="Indonesia">Indonesia</option>
+                            <option value="Thailand">Thailand</option>
+                            <option value="Vietnam">Vietnam</option>
+                            <option value="South Africa">South Africa</option>
+                            <option value="Brazil">Brazil</option>
+                            <option value="Mexico">Mexico</option>
+                            <option value="Argentina">Argentina</option>
+                            <option value="Russia">Russia</option>
+                            <option value="Other">Other</option>
                         </select>
                     </div>
                 </div>
