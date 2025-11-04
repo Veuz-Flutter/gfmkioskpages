@@ -1,4 +1,10 @@
 <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+
+    body {
+        font-family: 'Poppins', sans-serif !important;
+    }
     /* Registration Form */
     .registration-form {
         position: fixed;
@@ -19,15 +25,16 @@
     }
 
     .registration-form-content {
-        background: linear-gradient(135deg, #6b0285 0%, #4a2c7a 100%);
+        background: #fff;
         border-radius: 20px;
-        padding: 40px 50px;
-        min-width: 700px;
-        max-width: 90vw;
+        /* padding: 40px 50px; */
+        min-width: 90%;
+        max-width: 90%;
         max-height: 90vh;
         overflow-y: auto;
         box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
         animation: registrationSlideIn 0.4s ease-out;
+        position: relative;
     }
 
     @keyframes registrationSlideIn {
@@ -43,12 +50,14 @@
     }
 
     .registration-form-title {
-        color: white;
+        color: rgb(255, 255, 255);
         font-size: 28px;
         font-weight: 700;
-        text-align: center;
-        margin-bottom: 30px;
-        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+        text-align: left;
+        padding: 15px;
+        display: flex;
+        justify-content: space-between;
+    
     }
 
     .registration-form-content-wrapper {
@@ -69,33 +78,34 @@
     }
 
     .registration-field label {
-        color: white;
+        color: rgb(53, 53, 53);
         font-size: 14px;
-        font-weight: 500;
+        font-weight: 400;
         margin-bottom: 8px;
-        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    
     }
 
     .registration-field input,
     .registration-field select {
         background: white;
-        border: 2px solid transparent;
+        border: 2px solid #ebebeb;
         border-radius: 8px;
         padding: 12px 16px;
         color: #333;
         font-size: 16px;
         font-weight: 500;
         min-height: 48px;
-        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    
+        /* box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); */
         transition: all 0.2s ease;
+
     }
 
     .registration-field input:focus,
     .registration-field select:focus {
         outline: none;
-        border-color: #ffd700;
-        box-shadow: 0 4px 12px rgba(255, 215, 0, 0.3);
+        border-color: #421989;
+        box-shadow: 0 4px 12px #42198980;
     }
 
     .registration-form-actions {
@@ -115,7 +125,7 @@
         font-weight: 600;
         cursor: pointer;
         transition: all 0.2s ease;
-        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    
     }
 
     .registration-btn-primary {
@@ -138,6 +148,47 @@
     .registration-btn-secondary:hover {
         background: rgba(255, 255, 255, 0.3);
         transform: translateY(-2px);
+    }
+
+    .form_main {
+        padding: 40px;
+    }
+
+    .registration-close-btn {
+        position: absolute;
+        top: 16px;
+        right: 16px;
+        width: 40px;
+        height: 40px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border: none;
+        background: transparent;
+        cursor: pointer;
+        border-radius: 8px;
+        color: #333;
+        transition: background .12s ease, color .12s ease;
+        z-index: 20;
+    }
+
+    .modal_header {
+        background: linear-gradient(135deg, #6b0285 0%, #4a2c7a 100%);
+    }
+
+    .registration-close-btn:hover {
+        background: rgba(0, 0, 0, 0.06);
+    }
+
+    .registration-close-btn svg {
+        width: 38px;
+        height: 38px;
+        display: block;
+        color: #fff;
+        background: #eaeaea47;
+        padding: 3px;
+        font-size: 30px;
+        border-radius: 5px;
     }
 
     @media (max-width: 768px) {
@@ -165,8 +216,21 @@
 <!-- Registration Form -->
 <div class="registration-form hidden" id="registrationForm">
     <div class="registration-form-content">
-        <h2 class="registration-form-title">Registration Form</h2>
-        <form id="registrationFormElement" onsubmit="handleRegistrationSubmit(event)">
+        <div class="modal_header">
+            <h2 class="registration-form-title">Registration Form</h2>
+
+            <!-- close button -->
+            <button type="button" class="registration-close-btn" aria-label="Close registration form"
+                onclick="closeRegistrationForm()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round" aria-hidden="true">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+            </button>
+
+        </div>
+        <form id="registrationFormElement" class="form_main" onsubmit="handleRegistrationSubmit(event)">
             <div class="registration-form-content-wrapper">
                 <div class="registration-field-group">
                     <div class="registration-field">
@@ -181,10 +245,7 @@
                         <label for="reg-company">Company Name</label>
                         <input type="text" id="reg-company" name="company">
                     </div>
-                    <div class="registration-field">
-                        <label for="reg-nationality">Nationality</label>
-                        <input type="text" id="reg-nationality" name="nationality">
-                    </div>
+
                 </div>
                 <div class="registration-field-group">
                     <div class="registration-field">
@@ -195,6 +256,14 @@
                         <label for="reg-mobile">Phone Number *</label>
                         <input type="tel" id="reg-mobile" name="mobile" required>
                     </div>
+                    <div class="registration-field">
+                        <label for="reg-nationality">Nationality</label>
+                        <input type="text" id="reg-nationality" name="nationality">
+                    </div>
+
+                </div>
+
+                <div class="registration-field-group">
                     <div class="registration-field">
                         <label for="reg-designation">Job Title</label>
                         <input type="text" id="reg-designation" name="designation">
@@ -222,3 +291,12 @@
         </form>
     </div>
 </div>
+
+<script>
+    if (typeof closeRegistrationForm !== 'function') {
+        function closeRegistrationForm() {
+            const el = document.getElementById('registrationForm');
+            if (el) el.classList.add('hidden');
+        }
+    }
+</script>
