@@ -276,6 +276,8 @@ function showDummyControlls() {
 }
 
 // Registration Form Functions
+let registrationFormAutoCloseTimeout = null;
+
 function openRegistrationForm() {
     console.log('📝 Opening registration form');
     const registrationForm = document.getElementById('registrationForm');
@@ -317,6 +319,12 @@ function closeRegistrationForm() {
         console.log('🙈 Registration form hidden');
     }
 
+    // Clear auto-close timeout if it exists
+    if (registrationFormAutoCloseTimeout) {
+        clearTimeout(registrationFormAutoCloseTimeout);
+        registrationFormAutoCloseTimeout = null;
+    }
+
     // Hide loading state when closing form
     hideRegistrationLoading();
 
@@ -344,6 +352,12 @@ function showRegistrationLoading() {
 function hideRegistrationLoading() {
     const loadingOverlay = document.getElementById('registrationLoadingOverlay');
     const submitBtn = document.getElementById('registration-submit-btn');
+
+    // Clear auto-close timeout if it exists
+    if (registrationFormAutoCloseTimeout) {
+        clearTimeout(registrationFormAutoCloseTimeout);
+        registrationFormAutoCloseTimeout = null;
+    }
 
     if (loadingOverlay) {
         loadingOverlay.classList.remove('visible');
@@ -391,6 +405,18 @@ function handleRegistrationSubmit(event) {
         data: registrationData,
         timestamp: new Date().toISOString()
     });
+
+    // Auto-close form after 10 seconds if no errors occur
+    // Clear any existing timeout first
+    if (registrationFormAutoCloseTimeout) {
+        clearTimeout(registrationFormAutoCloseTimeout);
+    }
+
+    registrationFormAutoCloseTimeout = setTimeout(() => {
+        console.log('⏰ Auto-closing registration form after 10 seconds');
+        closeRegistrationForm();
+        registrationFormAutoCloseTimeout = null;
+    }, 10000);
 
     // Note: Loading will be hidden when form closes or errors are shown
     // closeRegistrationForm();
