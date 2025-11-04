@@ -91,6 +91,8 @@ function openDrawer() {
 let isRegistrationMode = false;
 
 function toggleRegistrationMode(value) {
+
+    closeRegistrationForm();
     // If value is provided (true/false), use it; otherwise toggle
     isRegistrationMode = value !== undefined ? value : !isRegistrationMode;
 
