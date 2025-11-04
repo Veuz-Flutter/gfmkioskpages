@@ -285,6 +285,9 @@ function openRegistrationForm() {
     // Clear any previous errors when opening the form
     clearErrors();
 
+    // Hide loading state when opening form
+    hideRegistrationLoading();
+
     // Setup field error clearing (in case form was loaded dynamically)
     setTimeout(() => {
         setupFieldErrorClearing();
@@ -312,10 +315,43 @@ function closeRegistrationForm() {
         console.log('🙈 Registration form hidden');
     }
 
+    // Hide loading state when closing form
+    hideRegistrationLoading();
+
     sendToFlutter({
         type: 'closeRegistrationForm',
         timestamp: new Date().toISOString()
     });
+}
+
+function showRegistrationLoading() {
+    const loadingOverlay = document.getElementById('registrationLoadingOverlay');
+    const submitBtn = document.getElementById('registration-submit-btn');
+
+    if (loadingOverlay) {
+        loadingOverlay.classList.add('visible');
+    }
+
+    if (submitBtn) {
+        submitBtn.classList.add('loading');
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Submitting...';
+    }
+}
+
+function hideRegistrationLoading() {
+    const loadingOverlay = document.getElementById('registrationLoadingOverlay');
+    const submitBtn = document.getElementById('registration-submit-btn');
+
+    if (loadingOverlay) {
+        loadingOverlay.classList.remove('visible');
+    }
+
+    if (submitBtn) {
+        submitBtn.classList.remove('loading');
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Submit Registration';
+    }
 }
 
 function handleRegistrationSubmit(event) {
@@ -324,6 +360,8 @@ function handleRegistrationSubmit(event) {
 
     // Clear previous errors
     clearErrors();
+    // Show loading state
+    showRegistrationLoading();
 
     // Get form data
     const formData = new FormData(event.target);
@@ -352,7 +390,7 @@ function handleRegistrationSubmit(event) {
         timestamp: new Date().toISOString()
     });
 
-    // Close the form after submission
+    // Note: Loading will be hidden when form closes or errors are shown
     // closeRegistrationForm();
 
     // Optionally show success message or welcome message
@@ -376,6 +414,9 @@ const registrationFieldMap = {
 // Function to show validation errors
 function showError(errorData) {
     console.log('❌ Showing registration errors:', errorData);
+
+    // Hide loading state when showing errors
+    hideRegistrationLoading();
 
     // Clear previous errors first
     clearErrors();

@@ -135,6 +135,70 @@
         flex: 1;
     }
 
+    .registration-loading-overlay {
+        position: absolute;
+        inset: 0;
+        background: rgba(255, 255, 255, 0.95);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 10;
+        border-radius: 20px;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.3s ease;
+    }
+
+    .registration-loading-overlay.visible {
+        opacity: 1;
+        pointer-events: auto;
+    }
+
+    .registration-loading-text {
+        font-size: 18px;
+        font-weight: 600;
+        color: #421989;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .registration-loading-spinner {
+        width: 24px;
+        height: 24px;
+        border: 3px solid #42198933;
+        border-top-color: #421989;
+        border-radius: 50%;
+        animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin {
+        to {
+            transform: rotate(360deg);
+        }
+    }
+
+    .registration-btn-primary.loading {
+        opacity: 0.7;
+        cursor: not-allowed;
+        position: relative;
+    }
+
+    .registration-btn-primary.loading::after {
+        content: '';
+        position: absolute;
+        width: 16px;
+        height: 16px;
+        margin: auto;
+        border: 2px solid transparent;
+        border-top-color: currentColor;
+        border-radius: 50%;
+        animation: spin 0.6s linear infinite;
+        right: 12px;
+        top: 0;
+        bottom: 0;
+    }
+
     .registration-form-actions {
         display: flex;
         gap: 15px;
@@ -258,6 +322,12 @@
 
         </div>
         <form id="registrationFormElement" class="form_main" onsubmit="handleRegistrationSubmit(event)">
+            <div class="registration-loading-overlay" id="registrationLoadingOverlay">
+                <div class="registration-loading-text">
+                    <div class="registration-loading-spinner"></div>
+                    <span>Please wait...</span>
+                </div>
+            </div>
             <div class="registration-form-content-wrapper">
                 <div class="registration-field-group">
                     <div class="registration-field">
@@ -430,7 +500,7 @@
                     onclick="closeRegistrationForm()">
                     Cancel
                 </button>
-                <button type="submit" class="registration-btn registration-btn-primary">
+                <button type="submit" id="registration-submit-btn" class="registration-btn registration-btn-primary">
                     Submit Registration
                 </button>
             </div>
