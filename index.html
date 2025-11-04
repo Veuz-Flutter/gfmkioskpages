@@ -8,12 +8,82 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
     <link rel="icon" type="image/png" sizes="32x32" href="img/favicon.png">
+    <style>
 
+        .main-content{
+            background: #00000099;
+        }
+
+        .welcome-title{
+            color: #fff;
+        }
+
+        .responsibility{
+            color: #fff;
+        }
+
+        .responsibility-bold{
+            color: #fff;
+        }
+
+        .checkin-btn{
+            background: #ffffff25;
+            backdrop-filter: blur(1px);
+            border: 1px solid #ffffff7b;
+        }
+
+        
+
+        .main_bg_video {
+            position: fixed;
+            right: 0;
+            bottom: 0;
+            min-width: 100%;
+            min-height: 100%;
+            z-index: -1;
+        }
+
+        .main_bg_video::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5); /* Adjust opacity as needed */
+            z-index: -1;
+        }
+
+        .main_bg_video video {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            min-width: 100%;
+            min-height: 100%;
+            width: auto;
+            height: auto;
+            object-fit: cover;
+        }
+
+        .header{
+            background: #00000099;
+
+        }
+    </style>
 </head>
 
 <body>
     <!-- Customer Details Panel -->
     <div id="dummyControllContainer"></div>
+
+      <div class="main_bg_video">
+            <video autoplay muted loop playsinline>
+                <!-- <source src="videos/wallpaper_10.mp4" type="video/mp4"> -->
+                <!-- Add fallback sources if needed -->
+                <source src="videos/gulfood_01.webm" type="video/webm">
+            </video>
+        </div>
 
     <!-- Header Section -->
     <div class="header">
@@ -34,6 +104,7 @@
 
     <!-- Main Content Section -->
     <div class="main-content">
+      
         <div class="main-content_wrapper" id="mainContent">
             <div class="welcome-section">
                 <div class="welcome-title">
