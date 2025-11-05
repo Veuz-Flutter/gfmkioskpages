@@ -303,7 +303,7 @@ function openRegistrationForm() {
         if (firstNameField) {
             firstNameField.focus();
         }
-    }, 1000);
+    }, 100);
 
     sendToFlutter({
         type: 'openRegistrationForm',
